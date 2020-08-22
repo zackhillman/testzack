@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from datetime import date
 
 from django.contrib import messages
 from .models import *
 from .forms import  CreateUserForm
+import pandas as pd
+import datetime
 
 import arxiv
 import urllib.request as libreq
@@ -36,7 +41,7 @@ def registerPage(request):
 				messages.success(request, 'Account was created for ' + user)
 
 				return redirect('login')
-			
+
 
 		context = {'form':form}
 		return render(request, 'accounts/register.html', context)
@@ -80,11 +85,10 @@ def prePro(text):
 	cleanedText = re.sub(r'(\. ){2,}', '. ', cleanedText).strip()  # Replace all multiple period spaces with one
 	return cleanedText
 
-def query(the_date, Category):
-	all_sentences = []
+def query(the_date, Category, category_obj):
 	base_url = 'http://export.arxiv.org/api/query?'
 	search_query = Category
-	query = 'search_query=%s&max_results=100&sortBy=submittedDate&sortOrder=descending' % (search_query)
+	query = 'search_query=%s&max_results=30&sortBy=submittedDate&sortOrder=descending' % (search_query)
 	feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
 	feedparser._FeedParserMixin.namespaces['http://arxiv.org/schemas/atom'] = 'arxiv'
 	with libreq.urlopen(base_url + query) as url:
@@ -92,9 +96,15 @@ def query(the_date, Category):
 	feed = feedparser.parse(response)
 	date = the_date
 	corpus_entry = []
+	exists = False
 	count = 0
 	for entry in feed.entries:
 		# print (entry.title + " " + entry.published + "\n")
+		if entry.published[0:10] == date:
+			corpus_entry.append(entry)
+			exists = True
+	# If date does not exist just returns most recent articles
+	if exists == False:
 		if count == 0:
 			count = 1
 			if entry.published[0:10] == date:
@@ -103,6 +113,7 @@ def query(the_date, Category):
 				date = entry.published[0:10]
 		if entry.published[0:10] == date:
 			corpus_entry.append(entry)
+
 	for paper in corpus_entry:
 		paper.summary = prePro(paper.summary.lower())
 	stop_Words = stop_words.ENGLISH_STOP_WORDS
@@ -116,7 +127,9 @@ def query(the_date, Category):
 	tfidf_transformer.fit(word_count_vector)
 
 	feature_names = cv.get_feature_names()
+	i = 0
 	for paper in corpus_entry:
+		i += 1
 		tf_idf_vector = tfidf_transformer.transform(cv.transform([paper.summary]))
 		sorted_items = sort_coo(tf_idf_vector.tocoo())
 		keywords = extract_topn_from_vector(feature_names, sorted_items)
@@ -170,19 +183,22 @@ def query(the_date, Category):
 				top3_scores.append(sentenceTotal)
 				top3_breakdown.append(breakdown)
 
-		print(paper.title + "\n")
+		three_sentences = []
 		for sentence in top3_sentences:
 			if sentence == '':
 				print(sentence)
 			else:
 				if sentence[0] == ' ':
-					sentence = sentence[1:] + "\n"
+					print(sentence[1:] + "\n")
 				else:
-					sentence = sentence + "\n"
+					print(sentence + "\n")
+			three_sentences.append(sentence)
 
-		obj = Articles(sentence=sentence, category=Category, date=date)
+		obj = Articles(title=paper.title, sentence=three_sentences, category=category_obj, date=date)
 		obj.save()
-		print("\n" + "Category: " + Category + "\n" + "Date: " + date)
+		print(i)
+		print("\n" + paper.title + "\n")
+		print("Category: " + Category + "\n" + "Date: " + date + "\n")
 
 # For use in tf-idf
 def extract_topn_from_vector(feature_names, sorted_items):
@@ -212,12 +228,6 @@ def sort_coo(coo_matrix):
 
 def home(request):
 	print('---------home-----------')
-
-	the_date = "2020-08-09"
-	category = 'cs.lg'
-	print('calling query')
-	query(the_date, category)
-
 	context = {}
 	return render(request, 'accounts/index.html', context)
 
@@ -227,3 +237,78 @@ def get_articles_table(request):
 
 	print(len(articles))
 	return JsonResponse({"articles": list(articles)})
+
+@csrf_exempt
+def get_stored_categories(request):
+	data = {}
+	for main_category in ['Astrophysics', 'Condensed Matter', 'Physics', 'Mathematics', 'Nonlinear Sciences','Computer Science',
+						  		'Quantitative Biology','Statistics', 'Electrical Engineering and System Sciences', 'Ecnomics']:
+		articles = Categories.objects.filter(main_category=main_category).values('slug','category')
+		data[main_category] = list(articles)
+	return JsonResponse({"articles": data})
+
+
+@csrf_exempt
+def get_articles(request):
+
+	if request.method == 'POST':
+		print('POST Request body data')
+		data = request.body.decode('utf-8')
+		data = json.loads(data)
+		recent = data['recent']
+		slug = data['slug']
+
+		if recent == 'true':
+			the_date = date.today()
+		else:
+			the_date = data['date']
+
+		print(the_date, slug)
+		category_obj = Categories.objects.get(slug=slug)
+		articles = Articles.objects.filter(category=category_obj).filter(date=the_date).values()[:30]
+
+		if len(articles) == 0:
+			print('IF category obj ',category_obj.category)
+			try:
+				query(the_date, slug, category_obj)
+				articles = Articles.objects.filter(category=category_obj).filter(date=the_date).values()[:30]
+
+			except:
+				print('except')
+				articles = Articles.objects.filter(category=category_obj).order_by('date').values()[:30]
+
+		print(len(articles))
+		return JsonResponse({"articles": list(articles)})
+	return JsonResponse({'data':'empty'})
+
+
+def populate_categories(request):
+	df = pd.read_excel('Categories.xlsx')
+	for index, row in df.iterrows():
+		if row['Column1'] is not np.nan:
+
+			if 'astro' in row['Column1']:
+				main_category = 'Astrophysics'
+			elif 'cond' in row['Column1']:
+				main_category = 'Condensed Matter'
+			elif 'physics' in row['Column1']:
+				main_category = 'Physics'
+			elif 'math' in row['Column1']:
+				main_category = 'Mathematics'
+			elif 'nlin' in row['Column1']:
+				main_category = 'Nonlinear Sciences'
+			elif 'cs' in row['Column1']:
+				main_category = 'Computer Science'
+			elif 'q-bio' in row['Column1']:
+				main_category = 'Quantitative Biology'
+			elif 'stat' in row['Column1']:
+				main_category = 'Statistics'
+			elif 'eess' in row['Column1']:
+				main_category = 'Electrical Engineering and System Sciences'
+			elif 'econ' in row['Column1']:
+				main_category = 'Ecnomics'
+
+			obj = Categories(main_category=main_category, slug=str(row['Column1']).strip(), category=str(row['Column2']).strip())
+			obj.save()
+	print('Data has been generated for Categories.xlsx')
+
