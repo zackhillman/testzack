@@ -261,9 +261,9 @@ class CustomLayout extends Component {
             >
           {articleData.map((items,idx) =>
           <div style={{margin:'0 0 30px 0'}}>
-          <Link target='_blank' to={items.link == null ? '' : items.link}>
+          <a target='_blank' href={items.link == null ? '' : items.link}>
           <Title level={3}>{items.title}</Title>  
-          </Link>
+          </a>
         
           <ul style={{textTransform:'capitalize'}}>   
           {items.sortedData.map((ingredientsDeal, indx) =>
