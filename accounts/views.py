@@ -194,7 +194,7 @@ def query(the_date, Category, category_obj):
 					print(sentence + "\n")
 			three_sentences.append(sentence)
 
-		obj = Articles(title=paper.title, sentence=three_sentences, category=category_obj, date=date)
+		obj = Articles(title=paper.title, link=paper.link,sentence=three_sentences, category=category_obj, date=date)
 		obj.save()
 		print(i)
 		print("\n" + paper.title + "\n")
@@ -312,3 +312,15 @@ def populate_categories(request):
 			obj.save()
 	print('Data has been generated for Categories.xlsx')
 
+@csrf_exempt
+def store_email(request):
+	if request.method == 'POST':
+		data = request.body.decode('utf-8')
+		data = json.loads(data)
+		email = data['email']
+		print('email ',email)
+		obj=Subscribe(email=email)
+		obj.save()
+		return JsonResponse({'email stored ':email})
+
+	return JsonResponse({'email stored ':'0'})

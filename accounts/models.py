@@ -17,11 +17,19 @@ class Categories(models.Model):
 
 class Articles(models.Model):
 	title = models.CharField(max_length=200, null=True)
+	link = models.CharField(max_length=200, null=True)
 	sentence = models.CharField(max_length=200, null=True)
 	category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING)
 	date = models.DateField()
 
 	def __str__(self):
 		return self.category
+
+
+class Subscribe(models.Model):
+	email = models.CharField(max_length=200)
+
+	def __str__(self):
+		return self.email
 
 

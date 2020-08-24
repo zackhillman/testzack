@@ -11,3 +11,66 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-layout {
+  min-height: 100vh !important;
+}
+.ant-layout-footer {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  background: #fff !important;
+  padding: 40px !important;
+  margin-top: 30px;
+}
+.ant-layout-sider-children .ant-menu-root  {
+max-height: 100vh;
+overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+.ant-layout-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+
+
+/* Track */
+::-webkit-scrollbar-track {
+  border: 1px solid #E0DFDF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb:vertical {
+  -webkit-border-radius: 10px;
+  border-radius: 6px;
+  /*background: #E0DFDF;*/
+  width: 10px;
+  /*background: url('images/scrollbar-thumb-horizontal.png') 0;*/
+  background: #cccccc80;
+}
+
+
+
+
+  ::-webkit-scrollbar-thumb:vertical:hover {
+      background: #cccccc;
+  }
+
+::-webkit-scrollbar-thumb:horizontal {
+  -webkit-border-radius: 10px;
+  border-radius: 6px;
+  /*background: #E0DFDF;*/
+  width: 10px;
+  /*background: url('images/scrollbar-thumb-vertical.png') 0;*/
+  background: #cccccc80;
+}
+
+  ::-webkit-scrollbar-thumb:horizontal:hover {
+      background: #cccccc;
+  }

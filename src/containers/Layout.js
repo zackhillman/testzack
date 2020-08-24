@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb, Select,Button,Typography, Spin } from "antd";
+import { Layout, Menu, Breadcrumb, Select,Button,Typography, Spin, Input,Form  } from "antd";
 import {
   UserOutlined,
   LaptopOutlined,
@@ -12,7 +12,7 @@ import * as moment from 'moment'
 
 
 const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
 const { Option } = Select;
 const { Title } = Typography;
 
@@ -147,6 +147,30 @@ class CustomLayout extends Component {
     })
     console.log(this.state.selectedDate)
   }
+
+  async onFinish (values) {
+    console.log(values);
+    const url = 'http://127.0.0.1:8000/store_email';
+    const response = await fetch(url , {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json; charset=utf-8",
+    },
+    body:JSON.stringify({
+      "email":values.email
+    }),
+    });
+    
+    const emailResponse = await response.json();
+  };
+
+   gotoLink (ele){
+    let offsetTop  = document.getElementById(ele).offsetTop;
+    window.scrollTo({
+        top: offsetTop-100, 
+        behavior: "smooth"
+    });
+}
   render() { 
     const{ articles, articleData , dateArray} = this.state ;
     const resume = articles.map((items, i) => {
@@ -165,13 +189,35 @@ class CustomLayout extends Component {
    
       <Layout>
       <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <Menu.Item key="1">nav 1</Menu.Item>
-        </Menu>
+        <div className="logo" style={{textAlign:'left',float:'left'}}>
+        <img height='50' width='' src={require('../assets/BSA_Logo.png')}/> 
+        </div>
+        <div style={{textAlign:'right'}}>
+        <Button
+         onClick={() => this.gotoLink('news')}  
+        type='primary'>
+         Newsletter
+        </Button>
+        <Button
+        style={{marginLeft:'15px'}}
+      type='primary'>
+      <Link to='/about'>
+      About
+      </Link>
+       
+      </Button>
+        </div>
+
       </Header>
-      <Layout>
-        <Sider width={400} className="site-layout-background">
+      <Layout style={{marginTop:'60px'}}>
+        <Sider width={400}
+            style={{
+              overflow: 'auto',
+              height: '100vh',
+              position: 'fixed',
+              left: 0,
+            }}
+        className="site-layout-background">
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}
@@ -182,7 +228,7 @@ class CustomLayout extends Component {
 
           </Menu>
         </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
+        <Layout style={{ padding: "0 24px 24px",marginLeft: 400  }}>
           {/* <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Breadcrumb.Item>List</Breadcrumb.Item>
@@ -215,7 +261,10 @@ class CustomLayout extends Component {
             >
           {articleData.map((items,idx) =>
           <div style={{margin:'0 0 30px 0'}}>
+          <Link target='_blank' to={items.link == null ? '' : items.link}>
           <Title level={3}>{items.title}</Title>  
+          </Link>
+        
           <ul style={{textTransform:'capitalize'}}>   
           {items.sortedData.map((ingredientsDeal, indx) =>
           <li> {ingredientsDeal.replace('[','').replace(']','').replace("'","").replace("'","")}</li> 
@@ -226,6 +275,25 @@ class CustomLayout extends Component {
           )}
             </div>
           </Content>
+
+          <Footer id='news' style={{ textAlign: 'center' }}>
+          <Title>Subscribe to newsletter</Title>
+          <Form name='myform' onFinish={this.onFinish}>
+          <Form.Item name='email'>
+          <Input
+        
+          style={{margin: '0 auto',width:'200px'}}
+          placeholder="Email" />
+  
+          </Form.Item>
+          <Button   
+          type="primary"
+          htmlType="submit">
+          Submit
+        </Button>
+          </Form>
+ 
+          </Footer>
         </Layout>
       </Layout>
     </Layout>
