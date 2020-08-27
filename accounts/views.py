@@ -3,29 +3,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from datetime import date
+from datetime import date, timedelta
+
 
 from django.contrib import messages
 from .models import *
 from .forms import  CreateUserForm
 import pandas as pd
-import datetime
 
-import arxiv
 import urllib.request as libreq
 import feedparser
-from io import StringIO
-from pathlib import Path
-import os
-import argparse
+
 import re
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction import stop_words
 import numpy as np
-from scipy.sparse.csr import csr_matrix
-import glob
 
 
 def registerPage(request):
@@ -194,11 +187,14 @@ def query(the_date, Category, category_obj):
 					print(sentence + "\n")
 			three_sentences.append(sentence)
 
-		obj = Articles(title=paper.title, link=paper.link,sentence=three_sentences, category=category_obj, date=date)
-		obj.save()
-		print(i)
+		print('query funct')
+		obj, created = Articles.objects.get_or_create(link=paper.link, defaults={'title': paper.title, 'sentence': three_sentences,
+																				'category': category_obj, 'date': date})
+		print('obj ', created)
+		print('in in query',i)
 		print("\n" + paper.title + "\n")
-		print("Category: " + Category + "\n" + "Date: " + date + "\n")
+		#print("Category: " + Category + "\n" + "Date: " + date + "\n")
+
 
 # For use in tf-idf
 def extract_topn_from_vector(feature_names, sorted_items):
@@ -216,6 +212,7 @@ def extract_topn_from_vector(feature_names, sorted_items):
 		results[feature_vals[idx]] = score_vals[idx]
 
 	return results
+
 
 # for use in tfidf
 def sort_coo(coo_matrix):
@@ -255,29 +252,37 @@ def get_articles(request):
 		print('POST Request body data')
 		data = request.body.decode('utf-8')
 		data = json.loads(data)
-		recent = data['recent']
 		slug = data['slug']
+		yesterday = date.today()- timedelta(days=1)
+		look_up_date = date.today()- timedelta(days=1)
+		search_date = yesterday - timedelta(days=2)
 
-		if recent == 'true':
-			the_date = date.today()
-		else:
-			the_date = data['date']
-
-		print(the_date, slug)
 		category_obj = Categories.objects.get(slug=slug)
-		articles = Articles.objects.filter(category=category_obj).filter(date=the_date).values()[:30]
 
-		if len(articles) == 0:
-			print('IF category obj ',category_obj.category)
-			try:
-				query(the_date, slug, category_obj)
-				articles = Articles.objects.filter(category=category_obj).filter(date=the_date).values()[:30]
+		for iteration in range(1,10):
+			#print('yesterday ',yesterday,' search_date ',search_date)
+			articles = Articles.objects.filter(category=category_obj).filter(date__range=[search_date, yesterday]).values()[:30]
+			#print(len(articles))
+			if len(articles) > 118:
+				print('If triggered')
+				return JsonResponse({"articles": list(articles)})
 
-			except:
-				print('except')
-				articles = Articles.objects.filter(category=category_obj).order_by('date').values()[:30]
+			else:
+				try:
+					print('try  ', slug, look_up_date)
 
-		print(len(articles))
+					obj, created = AlreadyScraped.objects.get_or_create(slug=slug, date=look_up_date)
+					print('try obj ', obj, created)
+
+					if created:
+						query(look_up_date, slug, category_obj)
+						print('Try Passed')
+				except:
+					search_date = yesterday - timedelta(days=iteration+iteration)
+
+				look_up_date = yesterday - timedelta(days=iteration)
+
+		articles = Articles.objects.filter(category=category_obj).order_by('-date').values()[:30]
 		return JsonResponse({"articles": list(articles)})
 	return JsonResponse({'data':'empty'})
 

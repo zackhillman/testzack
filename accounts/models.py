@@ -15,13 +15,17 @@ class Categories(models.Model):
 		return self.main_category
 
 
+class AlreadyScraped(models.Model):
+	date = models.DateField()
+	slug = models.CharField(max_length=200)
+
+
 class Articles(models.Model):
 	title = models.CharField(max_length=200, null=True)
 	link = models.CharField(max_length=200, null=True)
 	sentence = models.CharField(max_length=200, null=True)
 	category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING)
 	date = models.DateField()
-
 	def __str__(self):
 		return self.category
 
