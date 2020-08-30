@@ -25,7 +25,8 @@ class CustomLayout extends Component {
         selectedDate:'',
         articleData:[],
         loading:false,
-        dateArray:[]
+        dateArray:[],
+        dateState:''
     }
   }
 
@@ -75,29 +76,38 @@ class CustomLayout extends Component {
     const response = await fetch(url , {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json', 
     },
     body:JSON.stringify(dataToBeSent),
     });
+    var retval = await response.json();
+    const articleResponse = Object.entries(retval);
+    console.log('articleResponse my',articleResponse)
+    console.log('articleResponse my retval',retval)
     
-    const articleResponse = await response.json();
-    var text_arr =[];
-    for(let i = 0 ; i < articleResponse.articles.length ; i++){
-      text_arr [i] = articleResponse.articles[i].sentence.split(",");
-    
-      // articleResponse.articles.sample[i] = text_arr
-  } 
+    // var text_arr =[];
+    // for(let k = 0 ; k < articleResponse.length ; k++){
+    //   for(let i = 0 ; i < articleResponse[k] ; i++){
+    //     text_arr[i] = articleResponse[k][i];
+    //    }
+   
+    //  } 
+    // console.log('asdasdasd',text_arr)
+  //   for(let i = 0 ; i < articleResponse.articles.length ; i++){
+  //     text_arr [i] = articleResponse.articles[i].sentence.split(",");
+  //    } 
 
-  for(let i = 0 ; i < articleResponse.articles.length ; i++){  
-    articleResponse.articles[i].sortedData = text_arr[i]
-  } 
-    // articleResponse.articles.sample = text_arr
+  // for(let i = 0 ; i < articleResponse.articles.length ; i++){  
+  //   articleResponse.articles[i].sortedData = text_arr[i]
+  // } 
+  
     this.setState({
-      articleData:articleResponse.articles,
-      loading:false
+      articleData:articleResponse,
+      loading:false,
+      dateState:''
     })
-    console.log('MY ARTICLE',articleResponse)
-    console.log('text_arr',text_arr)
+    console.log('MY ARTICLE',this.state.articleData)
+    // console.log('text_arr',text_arr)
   }
 
 
@@ -134,7 +144,8 @@ class CustomLayout extends Component {
     // articleResponse.articles.sample = text_arr
     this.setState({
       articleData:articleResponse.articles,
-      loading:false
+      loading:false,
+      dateState:articleResponse.articles[0].date
     })
     console.log('MY ARTICLE',articleResponse)
     console.log('text_arr',text_arr)
@@ -237,9 +248,10 @@ class CustomLayout extends Component {
           <div style={{ padding: "30px 50px 0 50px" }}>
           <div style={{textAlign:'left'}}>Select Date</div>
              <Select defaultValue="Recent" style={{ width: 200,margin: "5px 0 16px 0",float:'left' }} onChange={this.handleChange}>
-             {dateArray.map((date, indx) =>
+             {/* {dateArray.map((date, indx) =>
              <Option value={date}>{date}</Option>    
-             )}
+             )} */}
+              <Option value='recent'>Recent</Option>   
            
                
           </Select>
@@ -259,19 +271,28 @@ class CustomLayout extends Component {
               style={{ background: "#fff", padding: 24, minHeight: 280,textAlign:'left' }}
               className="site-layout-content"
             >
-          {articleData.map((items,idx) =>
-          <div style={{margin:'0 0 30px 0'}}>
-          <a target='_blank' href={items.link == null ? '' : items.link}>
-          <Title level={3}>{items.title}</Title>  
-          </a>
         
-          <ul style={{textTransform:'capitalize'}}>   
-          {items.sortedData.map((ingredientsDeal, indx) =>
-          <li> {ingredientsDeal.replace('[','').replace(']','').replace("'","").replace("'","")}</li> 
-          )}      
-         
-          </ul>
-          </div>        
+          {articleData.map((items,idx) =>
+          <React.Fragment>
+          <Title level={4}>{items[0]}
+           </Title>  
+          {items[1].map((ingredientsDeal, indx) =>
+            <div style={{margin:'0 0 30px 0'}}>
+            <a target='_blank' href={ingredientsDeal.link == null ? '' : ingredientsDeal.link}>
+            <Title level={3}>{ingredientsDeal.title}  </Title>  
+            </a>
+            <ul style={{textTransform:'capitalize'}}>   
+            {Object.values(ingredientsDeal.sentence).map((itemSentence, indxx) =>
+            <li> {itemSentence.sentence}</li> 
+            )}      
+           
+            </ul>
+
+            </div>
+            
+          )} 
+          </React.Fragment>
+        
           )}
             </div>
           </Content>

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from jsonfield import JSONField
 
 import json
 
@@ -23,7 +24,7 @@ class AlreadyScraped(models.Model):
 class Articles(models.Model):
 	title = models.CharField(max_length=200, null=True)
 	link = models.CharField(max_length=200, null=True)
-	sentence = models.CharField(max_length=200, null=True)
+	sentence = JSONField()
 	category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING)
 	date = models.DateField()
 	def __str__(self):

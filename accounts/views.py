@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from jsonfield import JSONField
 
 
 from django.contrib import messages
@@ -78,7 +79,7 @@ def prePro(text):
 	cleanedText = re.sub(r'(\. ){2,}', '. ', cleanedText).strip()  # Replace all multiple period spaces with one
 	return cleanedText
 
-def query(the_date, Category, category_obj):
+def query(Category, category_obj):
 	base_url = 'http://export.arxiv.org/api/query?'
 	search_query = Category
 	query = 'search_query=%s&max_results=30&sortBy=submittedDate&sortOrder=descending' % (search_query)
@@ -87,25 +88,30 @@ def query(the_date, Category, category_obj):
 	with libreq.urlopen(base_url + query) as url:
 		response = url.read()
 	feed = feedparser.parse(response)
-	date = the_date
+	#date = the_date
 	corpus_entry = []
 	exists = False
 	count = 0
+	all_dates = []
 	for entry in feed.entries:
 		# print (entry.title + " " + entry.published + "\n")
-		if entry.published[0:10] == date:
-			corpus_entry.append(entry)
-			exists = True
+		#if entry.published[0:10] == date:
+		print('entery published ',entry.published, type(entry.published))
+		date_ = entry.published[:10]
+		date = datetime.strptime(date_, '%Y-%m-%d').date()
+		all_dates.append(date)
+		corpus_entry.append(entry)
+		#xists = True
 	# If date does not exist just returns most recent articles
-	if exists == False:
-		if count == 0:
-			count = 1
-			if entry.published[0:10] == date:
-				return False
-			else:
-				date = entry.published[0:10]
-		if entry.published[0:10] == date:
-			corpus_entry.append(entry)
+	# if exists == False:
+	# 	if count == 0:
+	# 		count = 1
+	# 		if entry.published[0:10] == date:
+	# 			return False
+	# 		else:
+	# 			date = entry.published[0:10]
+	# 	if entry.published[0:10] == date:
+	# 		corpus_entry.append(entry)
 
 	for paper in corpus_entry:
 		paper.summary = prePro(paper.summary.lower())
@@ -121,6 +127,7 @@ def query(the_date, Category, category_obj):
 
 	feature_names = cv.get_feature_names()
 	i = 0
+	d_i = 0
 	for paper in corpus_entry:
 		i += 1
 		tf_idf_vector = tfidf_transformer.transform(cv.transform([paper.summary]))
@@ -176,25 +183,23 @@ def query(the_date, Category, category_obj):
 				top3_scores.append(sentenceTotal)
 				top3_breakdown.append(breakdown)
 
-		three_sentences = []
+		three_sentences = {}
+		k = 0
 		for sentence in top3_sentences:
-			if sentence == '':
-				print(sentence)
-			else:
-				if sentence[0] == ' ':
-					print(sentence[1:] + "\n")
-				else:
-					print(sentence + "\n")
-			three_sentences.append(sentence)
+			# if sentence == '':
+			# 	print(sentence)
+			# else:
+			# 	if sentence[0] == ' ':
+			# 		print(sentence[1:] + "\n")
+			# 	else:
+			# 		print(sentence + "\n")
+			three_sentences[k] = {"sentence":sentence}
+			k += 1
 
-		print('query funct')
 		obj, created = Articles.objects.get_or_create(link=paper.link, defaults={'title': paper.title, 'sentence': three_sentences,
-																				'category': category_obj, 'date': date})
-		print('obj ', created)
-		print('in in query',i)
-		print("\n" + paper.title + "\n")
-		#print("Category: " + Category + "\n" + "Date: " + date + "\n")
-
+																				'category': category_obj, 'date': all_dates[d_i]})
+		print('obj created ',created, ' date',all_dates[d_i])
+		d_i += 1
 
 # For use in tf-idf
 def extract_topn_from_vector(feature_names, sorted_items):
@@ -245,45 +250,33 @@ def get_stored_categories(request):
 	return JsonResponse({"articles": data})
 
 
+from itertools import groupby
+
+def extract_date(entity):
+	return entity['date']
+
 @csrf_exempt
 def get_articles(request):
 
 	if request.method == 'POST':
-		print('POST Request body data')
+		print('POST Request body data new')
 		data = request.body.decode('utf-8')
 		data = json.loads(data)
 		slug = data['slug']
-		yesterday = date.today()- timedelta(days=1)
-		look_up_date = date.today()- timedelta(days=1)
-		search_date = yesterday - timedelta(days=2)
-
 		category_obj = Categories.objects.get(slug=slug)
+		try:
+			query(slug, category_obj)
+		except:
+			pass
 
-		for iteration in range(1,10):
-			#print('yesterday ',yesterday,' search_date ',search_date)
-			articles = Articles.objects.filter(category=category_obj).filter(date__range=[search_date, yesterday]).values()[:30]
-			#print(len(articles))
-			if len(articles) > 118:
-				print('If triggered')
-				return JsonResponse({"articles": list(articles)})
+		articles = Articles.objects.filter(category=category_obj).order_by('-date').values()
 
-			else:
-				try:
-					print('try  ', slug, look_up_date)
+		data = {}
+		for start_date, group in groupby(articles, key=extract_date):
+			#print('-date-----', start_date)
+			data[str(start_date)] = list(group)
 
-					obj, created = AlreadyScraped.objects.get_or_create(slug=slug, date=look_up_date)
-					print('try obj ', obj, created)
-
-					if created:
-						query(look_up_date, slug, category_obj)
-						print('Try Passed')
-				except:
-					search_date = yesterday - timedelta(days=iteration+iteration)
-
-				look_up_date = yesterday - timedelta(days=iteration)
-
-		articles = Articles.objects.filter(category=category_obj).order_by('-date').values()[:30]
-		return JsonResponse({"articles": list(articles)})
+		return JsonResponse(data)
 	return JsonResponse({'data':'empty'})
 
 
@@ -315,7 +308,8 @@ def populate_categories(request):
 
 			obj = Categories(main_category=main_category, slug=str(row['Column1']).strip(), category=str(row['Column2']).strip())
 			obj.save()
-	print('Data has been generated for Categories.xlsx')
+	return JsonResponse({'Categories generated': '1'})
+
 
 @csrf_exempt
 def store_email(request):
