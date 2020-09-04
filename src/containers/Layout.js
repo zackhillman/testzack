@@ -23,7 +23,7 @@ class CustomLayout extends Component {
         articles:[],
         selectedSlug:'',
         selectedDate:'',
-        articleData:[],
+        articleData:[['', [{'category_id': 1, 'date': '', 'id': 1, 'link': 'http://www.arxiv.org', 'sentence': {}, 'title': 'Stay up to Date on the Latest Scientific Research with Byte Size Summaries from your ArXiv.org Categories of Choice'}]]],
         loading:false,
         dateArray:[],
         dateState:''
@@ -131,6 +131,7 @@ class CustomLayout extends Component {
     });
     
     const articleResponse = await response.json();
+    console.log(articleResponse);
     var text_arr =[];
     for(let i = 0 ; i < articleResponse.articles.length ; i++){
       text_arr [i] = articleResponse.articles[i].sentence.split(",");
@@ -298,7 +299,7 @@ class CustomLayout extends Component {
           </Content>
 
           <Footer id='news' style={{ textAlign: 'center' }}>
-          <Title>Subscribe to newsletter</Title>
+          <Title>Subscribe to Our Newsletter</Title>
           <Form name='myform' onFinish={this.onFinish}>
           <Form.Item name='email'>
           <Input
