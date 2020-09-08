@@ -8,10 +8,10 @@ import CustomLayout from './containers/Layout';
 
 const BaseRouter = () =>(
     <div>
-        <Route exact path = '/' component = {CustomLayout} />
-        <Route path = '/about' component = {About} />
-        <Route exact path = '/test' component = {CSLGList} />
-        <Route exact path = '/:articleID' component = {ArticleDetail} />
+        <Route path = '/B.S.A.' component = {CustomLayout} />
+        <Route exact path = '/' exact={true} component = {About} />
+        <Route path = '/test' component = {CSLGList} />
+        <Route path = '/:articleID' component = {ArticleDetail} />
     </div>
 
 );

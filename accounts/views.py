@@ -304,7 +304,7 @@ def populate_categories(request):
 			elif 'eess' in row['Column1']:
 				main_category = 'Electrical Engineering and System Sciences'
 			elif 'econ' in row['Column1']:
-				main_category = 'Ecnomics'
+				main_category = 'Economics'
 
 			obj = Categories(main_category=main_category, slug=str(row['Column1']).strip(), category=str(row['Column2']).strip())
 			obj.save()

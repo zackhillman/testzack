@@ -23,7 +23,7 @@ class CustomLayout extends Component {
         articles:[],
         selectedSlug:'',
         selectedDate:'',
-        articleData:[['', [{'category_id': 1, 'date': '', 'id': 1, 'link': 'http://www.arxiv.org', 'sentence': {}, 'title': 'Stay up to Date on the Latest Scientific Research with Byte Size Summaries from your ArXiv.org Categories of Choice'}]]],
+        articleData:[['', [{'category_id': 1, 'date': '', 'id': 1, 'link': 'http://www.arxiv.org', 'sentence': {}, 'title': 'Choose from the Categories Listed to the Left to View Byte Size Summaries of ArXiv.org Articles '}]]],
         loading:false,
         dateArray:[],
         dateState:''
@@ -179,11 +179,12 @@ class CustomLayout extends Component {
    gotoLink (ele){
     let offsetTop  = document.getElementById(ele).offsetTop;
     window.scrollTo({
-        top: offsetTop-100, 
+        top: offsetTop-100,
         behavior: "smooth"
     });
 }
   render() { 
+
     const{ articles, articleData , dateArray} = this.state ;
     const resume = articles.map((items, i) => {
       return (
@@ -202,21 +203,30 @@ class CustomLayout extends Component {
       <Layout>
       <Header className="header">
         <div className="logo" style={{textAlign:'left',float:'left'}}>
-        <img height='50' width='' src={require('../assets/BSA_Logo.png')}/> 
+          <Link to={'/B.S.A.'}>
+        <img height='50' width='' src={require('../assets/BSA_Logo.png')}/>
+            </Link>
         </div>
         <div style={{textAlign:'right'}}>
         <Button
-         onClick={() => this.gotoLink('news')}  
+         onClick={() => this.gotoLink('news')}
         type='primary'>
          Newsletter
         </Button>
         <Button
         style={{marginLeft:'15px'}}
       type='primary'>
-      <Link to='/about'>
-      About
+      <Link to='/'>
+      Home
       </Link>
-       
+
+      </Button>
+           <Button
+          style={{marginLeft:'15px'}}
+      type='primary'>
+      <Link to='/B.S.A.'>
+      B.S.A.
+      </Link>
       </Button>
         </div>
 
@@ -247,24 +257,8 @@ class CustomLayout extends Component {
             <Breadcrumb.Item>App</Breadcrumb.Item>
           </Breadcrumb> */}
           <div style={{ padding: "30px 50px 0 50px" }}>
-          <div style={{textAlign:'left'}}>Select Date</div>
-             <Select defaultValue="Recent" style={{ width: 200,margin: "5px 0 16px 0",float:'left' }} onChange={this.handleChange}>
-             {/* {dateArray.map((date, indx) =>
-             <Option value={date}>{date}</Option>    
-             )} */}
-              <Option value='recent'>Recent</Option>   
-           
-               
-          </Select>
-          <Button
-          style={{
-            float: 'left',
-            margin: '5px 20px 0 26px'
-        }}
-          onClick={() => this.getArticleWithDate()}   
-          type="primary">
-          Submit
-        </Button>
+
+
           </div>
      
           <Content style={{ padding: "0 50px" }}>
@@ -298,23 +292,24 @@ class CustomLayout extends Component {
             </div>
           </Content>
 
-          <Footer id='news' style={{ textAlign: 'center' }}>
-          <Title>Subscribe to Our Newsletter</Title>
+          <Footer id='news' style={{ background: '#fff', textAlign: 'left' }}>
+          <Title level={2}>Interested in a weekly digest?</Title>
+            Sign up for our waitlist
           <Form name='myform' onFinish={this.onFinish}>
           <Form.Item name='email'>
           <Input
-        
+
           style={{margin: '0 auto',width:'200px'}}
           placeholder="Email" />
-  
+
           </Form.Item>
-          <Button   
+          <Button
           type="primary"
           htmlType="submit">
           Submit
         </Button>
           </Form>
- 
+
           </Footer>
         </Layout>
       </Layout>
