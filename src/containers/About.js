@@ -68,7 +68,7 @@ class About extends Component {
               <Col span={17} style={{paddingTop:'3em', paddingRight:'3em'}} >
       
                   <Title level={1}>
-                      Welcome to Byte Size ArXiv
+                      Welcome to Byte Size Arxiv
                   </Title>
                      Byte Size Arxiv takes the articles published to ArXiv.org, isolates unique sentences in the abstract using TF-IDF
 
@@ -76,7 +76,7 @@ class About extends Component {
                 Creates a score for each word (ignoring stopwords). If a given word appears frequently in the abstract it’s score goes up. However, if the word is also common amongst the abstracts of all of the other articles, the score goes down.
                 The words with the highest scores are the most import words unique to the article in question! Click on the GIF to the right or the B.S.A. button to view summarized ArXiv.org articles of your choice.
               </Col>
-                <Link to={'/B.S.A'}>
+                <Link to={'/B.S.A.'}>
               <Col span={7}>
               <img height='250px' width='' src={require('../assets/BSA_Logo.png')}/>
               </Col>
@@ -100,9 +100,11 @@ class About extends Component {
                   </Title>
 Alex Duffy is a data and analytics tech. consultant for EY based in Los Angeles California. He studied Electrical and Computer Engineering at Northeastern University and has experience working as an engineer, product manager, and designer at Hasbro and Amazon Robotics. Alex is passionate about using technology, especially machine learning, to improve education.
               </Col>
+                   <Link to="http://linkedin.com/in/neerajsudhakar">
                    <Col span={6} style={{paddingLeft:'10em'}}>
               <img height='300px' width='' src={require('../assets/neeraj.png')}/>
               </Col>
+                </Link>
                    <Col span={6} style={{paddingTop:'3em', paddingLeft:'30px'}} >
 
                   <Title level={3}>
