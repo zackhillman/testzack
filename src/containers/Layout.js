@@ -23,7 +23,7 @@ class CustomLayout extends Component {
         articles:[],
         selectedSlug:'',
         selectedDate:'',
-        articleData:[['', [{'category_id': 1, 'date': '', 'id': 1, 'link': 'http://www.arxiv.org', 'sentence': {}, 'title': 'Choose from the Categories Listed to the Left to View Byte Size Summaries of ArXiv.org Articles '}]]],
+        articleData:[['', [{'category_id': 'cs', 'date': '', 'id': 1, 'link': '', 'sentence': {}, 'title': ''}]]],
         loading:false,
         dateArray:[],
         dateState:''

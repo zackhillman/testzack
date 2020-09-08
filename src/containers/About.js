@@ -65,7 +65,7 @@ class About extends Component {
      
               <div className="site-layout-content">
               <Row style={{margin:'30px 0'}}>
-              <Col span={14} style={{paddingTop:'3em', paddingRight:'3em'}} >
+              <Col span={17} style={{paddingTop:'3em', paddingRight:'3em'}} >
       
                   <Title level={1}>
                       Welcome to Byte Size ArXiv
@@ -77,12 +77,17 @@ class About extends Component {
                 The words with the highest scores are the most import words unique to the article in question! Click on the GIF to the right or the B.S.A. button to view summarized ArXiv.org articles of your choice.
               </Col>
                 <Link to={'/B.S.A'}>
-              <Col span={10}>
-              <img height='300px' width='' src={require('../assets/BSA.gif')}/>
+              <Col span={7}>
+              <img height='250px' width='' src={require('../assets/BSA_Logo.png')}/>
               </Col>
                 </Link>
               </Row>
-               <Row style={{margin:'15em 0'}}>
+                  <Row>
+                      <Col span={24} style={{paddingTop:'3em'}}>
+                    <img height='400px' width='' src={require('../assets/BSA.gif')}/>
+                          </Col>
+                    </Row>
+               <Row style={{margin:'12em 0'}}>
                    <Link to="https://www.linkedin.com/in/alex-d/">
               <Col span={6}>
               <img height='300px' width='' src={require('../assets/duffy.jpg')}/>
