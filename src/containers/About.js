@@ -74,7 +74,8 @@ class About extends Component {
 
                 Term Frequency - Inverse Document Frequency
                 Creates a score for each word (ignoring stopwords). If a given word appears frequently in the abstract it’s score goes up. However, if the word is also common amongst the abstracts of all of the other articles, the score goes down.
-                The words with the highest scores are the most import words unique to the article in question! Click on the GIF to the right or the B.S.A. button to view summarized ArXiv.org articles of your choice.
+                The words with the highest scores are the most import words unique to the article in question! Click on the logo to the right or the B.S.A. button to view summarized ArXiv.org articles of your choice.
+
               </Col>
                 <Link to={'/B.S.A.'}>
               <Col span={7}>
