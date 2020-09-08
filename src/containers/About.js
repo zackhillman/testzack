@@ -110,7 +110,7 @@ Alex Duffy is a data and analytics tech. consultant for EY based in Los Angeles 
                   <Title level={3}>
                       About Neeraj Sudhakar
                   </Title>
-Neeraj Sudhakar is a rising senior pursuing a combined BS/MS at Northeastern University. He is studying Chemical Engineering and Engineering Management with a focus on Data Science and has experience worked in quantitative financial services, biopharmaceuticals and drug development. Neeraj has a special interest in the applications of techonology and machine learning in the financial services industry.                   </Col>
+Neeraj Sudhakar is a rising senior pursuing a combined BS/MS at Northeastern University. He is studying Chemical Engineering and Engineering Management with a focus on Data Science and has experience in quantitative finance, biopharmaceuticals and drug development. Neeraj has a special interest in the applications of techonology and machine learning in the financial services industry.                   </Col>
               </Row>
               </div>
             </Content>
