@@ -1,3 +1,8 @@
+Stay up to date on cutting edge research on ArXiv .org with byte size summaries of brand new publications auto generated using ML (TF-IDF)
+
+Additional installation instructions here: 
+https://loom.com/share/fa38b49ae5ac4ffa97bbc6e8f0254b9e
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
