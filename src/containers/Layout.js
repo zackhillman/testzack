@@ -201,12 +201,12 @@ class CustomLayout extends Component {
       <Spin spinning={this.state.loading}>  
    
       <Layout>
-      <Header className="header">
-        <div className="logo" style={{textAlign:'left',float:'left'}}>
-          <Link to={'/B.S.A.'}>
-        <img height='50' width='' src={require('../assets/BSA_Logo.png')}/>
-            </Link>
-        </div>
+      <Header className="header" style={{backgroundColor:'black'}}>
+        <div className="logo" style={{color:'white', textAlign:'left',float:'left'}}>
+         <Title level={2} style={{color:'white', paddingTop:'10px'}}>
+             Byte Size Arxiv
+         </Title>
+      </div>
         <div style={{textAlign:'right'}}>
         <Button
          onClick={() => this.gotoLink('news')}
@@ -244,13 +244,13 @@ class CustomLayout extends Component {
             mode="inline"
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
-            style={{ height: "100%", borderRight: 0 }}
+            style={{ color:'white', backgroundColor:'black', height: "100%", borderRight: 0 }}
           >
           {resume}
 
           </Menu>
         </Sider>
-        <Layout style={{ padding: "0 24px 24px",marginLeft: 400  }}>
+        <Layout style={{ color:'white', backgroundColor:'white', padding: "0 24px 24px",marginLeft: 400  }}>
           {/* <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Breadcrumb.Item>List</Breadcrumb.Item>
@@ -263,7 +263,7 @@ class CustomLayout extends Component {
      
           <Content style={{ padding: "0 50px" }}>
             <div
-              style={{ background: "#fff", padding: 24, minHeight: 280,textAlign:'left' }}
+              style={{ background: 'white', padding: 24, minHeight: 280,textAlign:'left' }}
               className="site-layout-content"
             >
         
@@ -272,7 +272,7 @@ class CustomLayout extends Component {
           <Title level={4}>{items[0]}
            </Title>  
           {items[1].map((ingredientsDeal, indx) =>
-            <div style={{margin:'0 0 30px 0'}}>
+            <div style={{ margin:'0 0 30px 0'}}>
             <a target='_blank' href={ingredientsDeal.link == null ? '' : ingredientsDeal.link}>
             <Title level={3}>{ingredientsDeal.title}  </Title>  
             </a>
@@ -292,7 +292,8 @@ class CustomLayout extends Component {
             </div>
           </Content>
 
-          <Footer id='news' style={{ background: '#fff', textAlign: 'left' }}>
+          <Footer id='news' style={{background:'black', textAlign: 'left' }}>
+
           <Title level={2}>Interested in a weekly digest?</Title>
             Sign up for our waitlist
           <Form name='myform' onFinish={this.onFinish}>

@@ -32,11 +32,11 @@ class About extends Component {
     render() { 
         return ( 
             <Layout className="layout">
-      <Header className="header">
-      <div className="logo" style={{textAlign:'left',float:'left'}}>
-          <Link to={'/B.S.A.'}>
-      <img height='50' width='' src={require('../assets/BSA_Logo.png')}/>
-              </Link>
+      <Header className="header" style={{backgroundColor:'black'}}>
+      <div className="logo" style={{color:'white', textAlign:'left',float:'left'}}>
+         <Title level={2} style={{color:'white', paddingTop:'10px'}}>
+             Byte Size Arxiv
+         </Title>
       </div>
       <div style={{textAlign:'right'}}>
       <Button
@@ -61,43 +61,72 @@ class About extends Component {
 
       </div>
     </Header>
-            <Content style={{padding: '0 50px' ,margin:'60px 0'}}>
+            <Content style={{color:'black', backgroundColor:'white', padding: '0 50px' ,margin:'60px 0'}}>
      
-              <div className="site-layout-content">
+
               <Row style={{margin:'30px 0'}}>
-              <Col span={17} style={{paddingTop:'3em', paddingRight:'3em'}} >
+              <Col span={15} style={{textAlign:'left', paddingTop:'.5em', paddingRight:'1em'}} >
       
-                  <Title level={1}>
+                  <Title level={1} style={{color:'black'}}>
                       Welcome to Byte Size Arxiv
                   </Title>
-                     Byte Size Arxiv takes the articles published to ArXiv.org, isolates unique sentences in the abstract using TF-IDF
-
-                Term Frequency - Inverse Document Frequency
-                Creates a score for each word (ignoring stopwords). If a given word appears frequently in the abstract it’s score goes up. However, if the word is also common amongst the abstracts of all of the other articles, the score goes down.
-                The words with the highest scores are the most import words unique to the article in question! Click on the logo to the right or the B.S.A. button to view summarized ArXiv.org articles of your choice.
-
+                We are on a mission to make it easy for you to stay up to date with cutting edge research being shared on Arxiv.org.
+                  <Row style={{paddingTop:'1em'}}>
+                     To get started, click the button below and select a category and browse Byte-Size summaries of brand new publications automatically generated using Machine Learning.
+                  </Row>
+                  <Row style={{paddingTop:'.5em'}}>
+                      <Button
+      type='primary'>
+      <Link to='/B.S.A.'>
+      B.S.A.
+      </Link>
+      </Button>
+                  </Row>
               </Col>
-                <Link to={'/B.S.A.'}>
-              <Col span={7}>
+              <Col span={5} style={{textAlign:'right'}}>
               <img height='250px' width='' src={require('../assets/BSA_Logo.png')}/>
               </Col>
-                </Link>
               </Row>
                   <Row>
-                      <Col span={24} style={{paddingTop:'3em'}}>
-                    <img height='400px' width='' src={require('../assets/BSA.gif')}/>
+                      <Col span={24} style={{textAlign:'center', paddingTop:'3em'}}>
+                     <Title level={1} style={{color:'black'}}>
+                      Building B.S.A. with TF-IDF
+                  </Title>
                           </Col>
                     </Row>
-               <Row style={{margin:'12em 0'}}>
+                  <Row>
+
+                    <Col span={14} style={{textAlign:'left', paddingTop:'.3em', paddingRight:'3em'}} >
+
+               Byte Size Arxiv takes the articles published to ArXiv.org, isolates unique sentences in the abstract using TF-IDF. TF-IDF
+                        creates a score for each word (ignoring stopwords). If a given word appears frequently in the abstract it’s score goes up. However, if the word is also common amongst the abstracts of all of the other articles, the score goes down.
+The words with the highest scores are the most import words unique to the article in question!
+                        <Row style={{paddingTop:'1em'}}>
+                     Please reach out with any questions, concerns or opportunities. We would love to chat!
+                  </Row>
+                    </Col>
+                      <Col span={6} style={{textAlign:'right'}}>
+              <img height='250px' width='' src={require('../assets/BSA.gif')}/>
+              </Col>
+
+                    </Row>
+                  <Row>
+                      <Col span={24} style={{textAlign:'center', paddingTop:'2em'}}>
+                     <Title level={1} style={{color:'black'}}>
+                      About the Founders
+                  </Title>
+                          </Col>
+                    </Row>
+               <Row style={{margin:'2em 0'}}>
                    <Link to="https://www.linkedin.com/in/alex-d/">
               <Col span={6}>
               <img height='300px' width='' src={require('../assets/duffy.jpg')}/>
               </Col>
                 </Link>
-              <Col span={6} style={{paddingTop:'3em', paddingLeft:'3em'}} >
+              <Col span={6} style={{paddingTop:'.5em', paddingLeft:'3em'}} >
 
                   <Title level={3}>
-                      About Alex Duffy
+                      Alex Duffy
                   </Title>
 Alex Duffy is a data and analytics tech. consultant for EY based in Los Angeles California. He studied Electrical and Computer Engineering at Northeastern University and has experience working as an engineer, product manager, and designer at Hasbro and Amazon Robotics. Alex is passionate about using technology, especially machine learning, to improve education.
               </Col>
@@ -106,17 +135,17 @@ Alex Duffy is a data and analytics tech. consultant for EY based in Los Angeles 
               <img height='300px' width='' src={require('../assets/neeraj.png')}/>
               </Col>
                 </Link>
-                   <Col span={6} style={{paddingTop:'3em', paddingLeft:'30px'}} >
+                   <Col span={6} style={{paddingTop:'.5em', paddingLeft:'30px'}} >
 
                   <Title level={3}>
-                      About Neeraj Sudhakar
+                      Neeraj Sudhakar
                   </Title>
 Neeraj Sudhakar is a rising senior pursuing a combined BS/MS at Northeastern University. He is studying Chemical Engineering and Engineering Management with a focus on Data Science and has experience in quantitative finance, biopharmaceuticals and drug development. Neeraj has a special interest in the applications of techonology and machine learning in the financial services industry.                   </Col>
               </Row>
-              </div>
+
             </Content>
 
-            <Footer id='news' style={{background: '#68cd64', textAlign: 'left' }}>
+            <Footer id='news' style={{backgroundColor:'black', textAlign: 'left' }}>
           <Title level={3}>Interested in a Weekly Digest?</Title>
                 Sign up for our Waitlist
           <Form name='myform' onFinish={this.onFinish}>
