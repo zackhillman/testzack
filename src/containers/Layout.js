@@ -250,7 +250,7 @@ class CustomLayout extends Component {
 
           </Menu>
         </Sider>
-        <Layout style={{ color:'white', backgroundColor:'white', padding: "0 24px 24px",marginLeft: 400  }}>
+        <Layout style={{ color:'black', backgroundColor:'white', padding: "0 24px 24px",marginLeft: 400  }}>
           {/* <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Breadcrumb.Item>List</Breadcrumb.Item>
@@ -276,7 +276,7 @@ class CustomLayout extends Component {
             <a target='_blank' href={ingredientsDeal.link == null ? '' : ingredientsDeal.link}>
             <Title level={3}>{ingredientsDeal.title}  </Title>  
             </a>
-            <ul style={{textTransform:'capitalize'}}>   
+            <ul style={{textTransform:'capitalize'}}>
             {Object.values(ingredientsDeal.sentence).map((itemSentence, indxx) =>
             <li> {itemSentence.sentence}</li> 
             )}      
