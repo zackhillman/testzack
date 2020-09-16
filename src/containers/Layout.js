@@ -201,36 +201,35 @@ class CustomLayout extends Component {
       <Spin spinning={this.state.loading}>  
    
       <Layout>
-      <Header className="header" style={{backgroundColor:'black'}}>
-        <div className="logo" style={{color:'white', textAlign:'left',float:'left'}}>
-         <Title level={2} style={{color:'white', paddingTop:'10px'}}>
+      <Header className="header" style={{backgroundColor:'#414040'}}>
+      <div className="logo" style={{color:'white', textAlign:'left',float:'left'}}>
+         <Title level={2} style={{marginLeft:'2.2em', color:'white', paddingTop:'10px'}}>
              Byte Size Arxiv
          </Title>
       </div>
-        <div style={{textAlign:'right'}}>
-        <Button
-         onClick={() => this.gotoLink('news')}
-        type='primary'>
-         Newsletter
-        </Button>
-        <Button
-        style={{marginLeft:'15px'}}
-      type='primary'>
+      <div style={{textAlign:'right', paddingRight:'6.1em'}}>
+
+      <Button
+      type='secondary'>
       <Link to='/'>
       Home
       </Link>
-
       </Button>
-           <Button
+      <Button
           style={{marginLeft:'15px'}}
-      type='primary'>
+      type='secondary'>
       <Link to='/B.S.A.'>
       B.S.A.
       </Link>
       </Button>
-        </div>
-
-      </Header>
+    <Button
+       onClick={() => this.gotoLink('news')}
+       style={{marginLeft:'15px'}}
+      type='secondary'>
+       Newsletter
+      </Button>
+      </div>
+    </Header>2
       <Layout style={{marginTop:'60px'}}>
         <Sider width={400}
             style={{
@@ -244,7 +243,7 @@ class CustomLayout extends Component {
             mode="inline"
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
-            style={{ color:'white', backgroundColor:'black', height: "100%", borderRight: 0 }}
+            style={{ color:'white', backgroundColor:'#414040', height: "100%", borderRight: 0 }}
           >
           {resume}
 
@@ -263,7 +262,7 @@ class CustomLayout extends Component {
      
           <Content style={{ padding: "0 50px" }}>
             <div
-              style={{ background: 'white', padding: 24, minHeight: 280,textAlign:'left' }}
+              style={{ background: '#fff', padding: 24, minHeight: 280,textAlign:'left' }}
               className="site-layout-content"
             >
         
