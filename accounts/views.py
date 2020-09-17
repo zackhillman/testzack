@@ -244,7 +244,7 @@ def get_articles_table(request):
 def get_stored_categories(request):
 	data = {}
 	for main_category in ['Astrophysics', 'Condensed Matter', 'Physics', 'Mathematics', 'Nonlinear Sciences','Computer Science',
-						  		'Quantitative Biology','Statistics', 'Electrical Engineering and System Sciences', 'Ecnomics']:
+						  		'Quantitative Biology','Quantitative Finance', 'Statistics', 'Electrical Engineering and System Sciences', 'Economics']:
 		articles = Categories.objects.filter(main_category=main_category).values('slug','category')
 		data[main_category] = list(articles)
 	return JsonResponse({"articles": data})
@@ -299,6 +299,8 @@ def populate_categories(request):
 				main_category = 'Computer Science'
 			elif 'q-bio' in row['Column1']:
 				main_category = 'Quantitative Biology'
+			elif 'q-fin' in row['Column1']:
+				main_category = 'Quantitative Finance'
 			elif 'stat' in row['Column1']:
 				main_category = 'Statistics'
 			elif 'eess' in row['Column1']:
