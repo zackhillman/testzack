@@ -201,34 +201,29 @@ class CustomLayout extends Component {
       <Spin spinning={this.state.loading}>  
    
       <Layout>
-      <Header className="header" style={{backgroundColor:'#414040'}}>
-      <div className="logo" style={{color:'white', textAlign:'left',float:'left'}}>
-         <Title level={2} style={{marginLeft:'2.2em', color:'white', paddingTop:'10px'}}>
+      <Header className="header" style={{backgroundColor:'#FAEEDC'}}>
+      <div className="logo" style={{color:'black', textAlign:'left',float:'left'}}>
+         <Title level={2} style={{marginLeft:'2.2em', color:'black', paddingTop:'10px'}}>
              Byte Size Arxiv
          </Title>
       </div>
       <div style={{textAlign:'right', paddingRight:'6.1em'}}>
 
-      <Button
-      type='secondary'>
-      <Link to='/'>
-      Home
-      </Link>
-      </Button>
-      <Button
-          style={{marginLeft:'15px'}}
-      type='secondary'>
-      <Link to='/B.S.A.'>
-      B.S.A.
-      </Link>
-      </Button>
-    <Button
-       onClick={() => this.gotoLink('news')}
-       style={{marginLeft:'15px'}}
-      type='secondary'>
-       Newsletter
-      </Button>
-      </div>
+          <Button size='large' href='/'>
+          Home
+          </Button>
+          <Button size='large'
+              style={{marginLeft:'15px'}}
+         href = '/B.S.A.'>
+          B.S.A.
+          </Button>
+          <Button
+           onClick={() => this.gotoLink('news')}
+           style={{marginLeft:'15px'}}
+          type='secondary'>
+           Newsletter
+          </Button>
+         </div>
     </Header>2
       <Layout style={{marginTop:'60px'}}>
         <Sider width={400}
@@ -243,7 +238,7 @@ class CustomLayout extends Component {
             mode="inline"
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
-            style={{ color:'white', backgroundColor:'#414040', height: "100%", borderRight: 0 }}
+            style={{ color:'black', backgroundColor:'#FAEEDC', height: "100%", borderRight: 0 }}
           >
           {resume}
 

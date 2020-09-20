@@ -18,16 +18,6 @@ class ArticleList extends React.Component {
       console.log(res.data);
     });
 
-    axios.post("http://127.0.0.1:8000/get_articles/", {
-        date: "23-03-2020",
-        categoryName: "Astrophysics of Galaxies",
-      })
-      .then((res) => {
-        this.setState({
-          nm: res.data,
-        });
-        console.log(res.data);
-      });
   }
 
   render() {
