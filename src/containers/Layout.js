@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb, Select,Button,Typography, Spin, Input,Form  } from "antd";
+import { Layout, Menu, Breadcrumb, Select,Typography, Spin, Input,Form  } from "antd";
+import Button from '@material-ui/core/Button';
 import {
   UserOutlined,
   LaptopOutlined,
@@ -23,7 +24,7 @@ class CustomLayout extends Component {
         articles:[],
         selectedSlug:'',
         selectedDate:'',
-        articleData:[['', [{'category_id': 'cs', 'date': '', 'id': 1, 'link': '', 'sentence': {}, 'title': ''}]]],
+        articleData:[['', [{'category_id': '', 'date': '', 'id': 1, 'link': '', 'sentence': {}, 'title': ''}]]],
         loading:false,
         dateArray:[],
         dateState:''
@@ -202,12 +203,12 @@ class CustomLayout extends Component {
    
       <Layout>
       <Header className="header" style={{backgroundColor:'#FAEEDC'}}>
-      <div className="logo" style={{color:'black', textAlign:'left',float:'left'}}>
+        <div className="logo" style={{color:'#FAEEDC', textAlign:'left',float:'left'}}>
          <Title level={2} style={{marginLeft:'2.2em', color:'black', paddingTop:'10px'}}>
              Byte Size Arxiv
          </Title>
-      </div>
-      <div style={{textAlign:'right', paddingRight:'6.1em'}}>
+        </div>
+        <div style={{textAlign:'right', paddingRight:'6.1em'}}>
 
           <Button size='large' href='/'>
           Home
@@ -217,14 +218,14 @@ class CustomLayout extends Component {
          href = '/B.S.A.'>
           B.S.A.
           </Button>
-          <Button
+          <Button size={'large'}
            onClick={() => this.gotoLink('news')}
            style={{marginLeft:'15px'}}
           type='secondary'>
            Newsletter
           </Button>
          </div>
-    </Header>2
+      </Header>
       <Layout style={{marginTop:'60px'}}>
         <Sider width={400}
             style={{
