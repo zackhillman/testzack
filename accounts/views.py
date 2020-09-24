@@ -21,6 +21,11 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction import stop_words
 import numpy as np
 
+from django.views.generic import TemplateView
+from django.views.decorators.cache import never_cache
+
+# Serve Single Page Application
+index = never_cache(TemplateView.as_view(template_name='index.html'))
 
 def registerPage(request):
 	if request.user.is_authenticated:
@@ -227,11 +232,10 @@ def sort_coo(coo_matrix):
 # Return Abstracts to pass them on to split abstract and the rest, if passed a boolean i.e. True, loop through all categories
 
 
-
 def home(request):
 	print('---------home-----------')
 	context = {}
-	return render(request, 'accounts/index.html', context)
+	return render(request, 'index.html', context)
 
 
 def get_articles_table(request):
